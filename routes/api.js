@@ -1,9 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-const testControllers = require('../controllers/api/rooms');
+const RoomControllers = require('../controllers/api/roomsController');
 
-router.get('/', testControllers.saveRoom);
+//get all rooms
+router.get('/getRoom', RoomControllers.getRoom);
+//create new room
+router.post('/createRoom', RoomControllers.createRoom);
+//edit room
+router.put('/editRoom/:id', RoomControllers.editRoom);
+//delete room
+router.delete('/deleteRoom/:id', RoomControllers.deleteRoom);
 
 
 
