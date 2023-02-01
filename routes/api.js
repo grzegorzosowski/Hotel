@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const testControllers = require('../controllers/api/test');
+const testControllers = require('../controllers/api/rooms');
 
-router.get('/', testControllers.homePage);
+router.get('/', testControllers.saveRoom);
 
 
 
