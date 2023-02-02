@@ -1,6 +1,6 @@
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
-const Room = require('../../db/models/room');
+const Room = require('../db/models/room');
 
 class RoomController { 
     //create room
@@ -39,6 +39,7 @@ class RoomController {
         console.log(doc);
         res.status(200).json(doc);
     }
+    
     //get room
     async getRoom(req, res) {
         const name = req.params.nameRoom;

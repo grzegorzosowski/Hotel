@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const RoomControllers = require('../controllers/api/roomsController');
+const RoomControllers = require('../controllers/roomsController');
 
 //get all rooms
 router.get('/getAllRoom/:nameRoom', RoomControllers.getAllRoom);

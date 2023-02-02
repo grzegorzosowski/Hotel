@@ -1,0 +1,35 @@
+.single-room-box {
+    width: 60%;
+    height: 300px;
+    background-color: aliceblue;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 50px 50px 1fr;
+    gap: 2px;
+    grid-template-areas: 
+        "img img name name"
+        "img img type beds"
+        "img img desc desc"
+    ;
+}
+
+.room-img {
+    grid-area: img ; 
+}
+
+.room-name {
+    grid-area: name;
+}
+
+.room-type {
+    grid-area: type;
+}
+
+.room-beds {
+    grid-area: beds;
+}
+
+.room-description {
+    grid-area: desc;
+}
