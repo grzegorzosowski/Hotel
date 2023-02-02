@@ -5,6 +5,7 @@ const { port } = require('./config');
 const app = express();
 const apiRouter = require('./routes/api');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 // db
 require('./db/mongoose'); 
@@ -13,6 +14,8 @@ require('./db/mongoose');
 // Content type: application/json
 app.use(bodyParser.json());
 
+//cors 
+app.use(cors());
 // routes
 app.use('/', apiRouter);
 

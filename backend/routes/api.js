@@ -4,7 +4,7 @@ const router = express.Router();
 const RoomControllers = require('../controllers/roomsController');
 
 //get all rooms
-router.get('/getAllRoom/:nameRoom', RoomControllers.getAllRoom);
+router.get('/getAllRoom', RoomControllers.getAllRoom);
 //get room
 router.get('/getRoom/:nameRoom', RoomControllers.getRoom);
 //create new room

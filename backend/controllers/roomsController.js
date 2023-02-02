@@ -30,7 +30,7 @@ class RoomController {
         let doc;
         const name = req.params.nameRoom;
         try {
-            doc = await Room.find({name: name});
+            doc = await Room.find({});
         } catch (err){
             console.log(err);
             return res.status(500).json({message: err.message});
