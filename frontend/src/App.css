@@ -1,6 +1,55 @@
 .App {
+  width: 100%;
+  height: 100vh;
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+
+.nav-bar {
+  margin: 0;
+  width: 100%;
   background-color: #282c34;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.nav-bar ul {
+  margin: 0;
+  width: 80%;
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+.nav-bar ul li {
+  height: 40px;
+  line-height: 40px;
+  list-style-type: none;
+  text-align: center;
+}
+
+.nav-bar ul a {
+  width: 150px;
+  color: aliceblue;
+  text-decoration: none;
+}
+
+.nav-bar ul a:hover {
+  background-color: #44474e;
+  transition: 0.25s;
+}
+
+.log-in {
+  width: 15%;
+  position: absolute;
+  right: 5%;
+}
+
+.log-in ul {
+  width: 100%;
+}
+.log-in ul a {
+  width: 50%;
 }

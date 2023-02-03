@@ -1,7 +1,7 @@
 .single-room-box {
     width: 60%;
-    height: 300px;
-    background-color: aliceblue;
+    height: 400px;
+    background-color: rgb(65, 65, 65);
     margin-bottom: 20px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
