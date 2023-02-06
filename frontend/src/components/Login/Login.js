@@ -1,28 +1,50 @@
 import React from "react";
 import './Login.css';
-import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
-class Login extends React.Component {
+import CommonTextField from "../common/commonTextField/CommonTextField";
+import CommonButton from "../common/CommonButton/CommonButton";
+import InputPassword from "../common/InputPassword";
+import Typography from '@mui/material/Typography';
+
+
+class Login extends React.Component 
+{
     render() {
         return (
             <>
-                <div className="login-form-box">
-                    <h1>Log in</h1>
-                    <form name="login" action="/login" method="POST">
-                        <div className="single-form-line">
-                            <label className="form-label" >Email: </label>
-                            <input className="form-control" type="email" required></input>
-                        </div>
-                        <div className="single-form-line">
-                            <label className="form-label" >Password: </label>
-                            <input className="form-control" type="password" required></input>
-                        </div>
-                        <Button sx={{mt: '20px', mb: '20px'}} variant="contained">LOG IN</Button>
-                    </form>
-                </div>
+                <Box sx={{
+                    mt: 12,
+                    width: 3/10,
+                    minWidth: '240px',
+                    padding: 3,
+                    display: { 
+                        xs: 'flex', 
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        backgroundColor: 'rgba(240, 248, 255, 1)',
+                        boxShadow: '0 0 20px aliceblue',
+                        borderRadius: 5,
+                    }
+                }}
+                >
+                    <Typography variant="h4" gutterBottom>Log in</Typography>
+                    <Box
+                        sx={{
+                            width: 1,
+                            maxWidth: '100%',
+                            textAlign: 'center',
+                        }}
+                        >
+                        <form>
+                            <CommonTextField label='Email' type='email' size='small'></CommonTextField>
+                            <InputPassword></InputPassword>
+                            <CommonButton type='submit' variant='contained' color='primary' size='large' sx={{px: 5, mt: 3}}>Login</CommonButton>
+                        </form>
+                    </Box>
+                </Box>
             </>
         )
-    }
-}
+    }}
 
 export default Login;

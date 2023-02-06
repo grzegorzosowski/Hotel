@@ -37,7 +37,7 @@ form {
     width: 100%;
     border-radius: 5px;
     box-sizing: border-box;
-    background-color: aliceblue;
+    background-color: rgb(240, 248, 255);
 }
 
 .form-control:focus {

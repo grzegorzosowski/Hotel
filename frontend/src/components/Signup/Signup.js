@@ -1,35 +1,48 @@
 import React from 'react';
-import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
-import './Signup.css';
+import CommonTextField from "../common/commonTextField/CommonTextField";
+import CommonButton from "../common/CommonButton/CommonButton";
+import InputPassword from "../common/InputPassword";
+import Typography from '@mui/material/Typography';
+
+
 
 function Signup() {
     return (
         <>
-         <div className="form-box">
-                    <h1>Sign up and join us</h1>
-                    <form name="signup" action="/signup" method="POST">
-                        <div className='double-form-line'>
-                            <div className="single-form-line">
-                                <label className="form-label" >Name: </label>
-                                <input className="form-control" type="text" name="userName" required></input>
-                            </div>
-                            <div className="single-form-line">
-                                <label className="form-label" >Surname: </label>
-                                <input className="form-control" type="text" name="userSurname" required></input>
-                            </div>
-                        </div>
-                        <div className="single-form-line">
-                            <label className="form-label" >Email: </label>
-                            <input className="form-control" type="email" required></input>
-                        </div>
-                        <div className="single-form-line">
-                            <label className="form-label" >Password: </label>
-                            <input className="form-control" type="password" required></input>
-                        </div>
-                        <Button sx={{mt: '20px', mb: '20px'}} variant="contained">SIGN UP</Button>
-                    </form>
-                </div>
+         <Box sx={{
+                    mt: 12,
+                    width: 3/10,
+                    minWidth: '240px',
+                    padding: 3,
+                    display: { 
+                        xs: 'flex', 
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        backgroundColor: 'rgba(240, 248, 255, 1)',
+                        boxShadow: '0 0 20px aliceblue',
+                        borderRadius: 5,
+                    }
+                }}
+                >
+                    <Typography variant="h4" gutterBottom> Create account</Typography>
+                    <Box
+                        sx={{
+                            width: 1,
+                            maxWidth: '100%',
+                            textAlign: 'center',
+                        }}
+                        >
+                        <form>
+                            <CommonTextField label='Name' type='text' size='small'></CommonTextField>
+                            <CommonTextField label='Surname' type='text' size='small'></CommonTextField>
+                            <CommonTextField label='Email' type='Email' size='small'></CommonTextField>
+                            <InputPassword></InputPassword>
+                            <CommonButton type='submit' variant='contained' color='primary' size='large' sx={{px: 5, mt: 1}}>Signup</CommonButton>
+                        </form>
+                    </Box>
+                </Box>
         </>
     )
 }

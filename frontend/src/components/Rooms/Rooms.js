@@ -2,6 +2,8 @@ import React from "react";
 import './Rooms.css';
 import Room from './Room/Room';
 
+import { Box } from "@mui/material";
+
 class Rooms extends React.Component {
     constructor(props) {
         super(props);
@@ -29,16 +31,28 @@ class Rooms extends React.Component {
     
     render() {
         return (
-            <div className="rooms-box">
-                <p>Lista pokoi:</p>
+            <Box sx={{width: 1, boxSizing: 'border-box' }}>
+                <h1>Nasze pokoje</h1>
                 {this.state.rooms.map(room => (
                    <Room  
                         key={room.name} 
                         name={room.name}
                         type={room.type}
-                        beds={room.beds}/> 
+                        beds={room.beds}
+                    />  
                 ))}
-            </div>
+            </Box>
+            
+            // <div className="rooms-box">
+            //     <p>Lista pokoi:</p>
+            //     {this.state.rooms.map(room => (
+            //        <Room  
+            //             key={room.name} 
+            //             name={room.name}
+            //             type={room.type}
+            //             beds={room.beds}/> 
+            //     ))}
+            // </div>
         )
     }
 }
