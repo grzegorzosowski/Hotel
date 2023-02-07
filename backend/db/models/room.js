@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const RoomSchema = new mongoose.Schema({
     type: {
@@ -15,6 +15,4 @@ const RoomSchema = new mongoose.Schema({
     },
 });
 
-const Room = mongoose.model('Room', RoomSchema);
-
-module.exports = Room;
+module.exports = mongoose.model("Room", RoomSchema);
