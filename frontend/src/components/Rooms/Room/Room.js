@@ -18,7 +18,7 @@ function Room(props) {
                 <Typography variant="body1" my='10px'><b>Sleeps up to:</b> {props.beds}</Typography>
                 <Typography variant="body2">Veniam aliquip duis aute adipisicing ipsum consectetur sint culpa. Esse ut ullamco amet irure. Laborum sunt qui dolor sit ad nostrud sit sit adipisicing fugiat veniam proident aliqua. Culpa quis officia aute incididunt sunt culpa dolore fugiat sint culpa aliqua. Aute exercitation deserunt labore cupidatat qui. Fugiat eiusmod dolor elit labore fugiat id proident sunt cupidatat occaecat duis duis. Consectetur ullamco duis nulla dolor.</Typography>
             </Box>
-            <Box sx={{width: '50%'}}>
+            <Box sx={{width: '50%', textAlign: 'center'}}>
                 <img src={logo} width='600px' height='600px' alt="Room" />
             </Box>
         </Box>

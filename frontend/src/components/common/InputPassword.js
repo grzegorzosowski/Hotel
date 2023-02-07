@@ -8,7 +8,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 
-export default function InputPassword() {
+export default function InputPassword(props) {
     const [showPassword, setShowPassword] = React.useState(false);
   
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -17,10 +17,10 @@ export default function InputPassword() {
       event.preventDefault();
     };
     return (
-        <FormControl sx={{ width: 1 }} size='small' variant="outlined" >
-        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+        <FormControl sx={{ width: 1, mb: '20px' }} size='small' variant="outlined" id={props.text} >
+        <InputLabel htmlFor="outlined-adornment-password" id={props.text}>{props.text}</InputLabel>
         <OutlinedInput
-          id="outlined-adornment-password"
+          id={props.text}
           type={showPassword ? 'text' : 'password'}
           endAdornment={
             <InputAdornment position="end">
@@ -34,7 +34,8 @@ export default function InputPassword() {
               </IconButton>
             </InputAdornment>
           }
-          label="Password"
+          label={props.text}
+          
         />
       </FormControl>
     )
