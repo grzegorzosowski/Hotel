@@ -6,7 +6,7 @@ import CommonButton from "../common/CommonButton/CommonButton";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
-function Contact({ asd }) {
+function Contact() {
     return (
         <Box
             sx={{
