@@ -38,7 +38,7 @@ class Login extends React.Component
                         >
                         <form>
                             <CommonTextField label='Email' type='email' size='small'></CommonTextField>
-                            <InputPassword></InputPassword>
+                            <InputPassword text={'Password'}></InputPassword>
                             <CommonButton type='submit' variant='contained' color='primary' size='large' sx={{px: 5, mt: 3}}>Login</CommonButton>
                         </form>
                     </Box>
