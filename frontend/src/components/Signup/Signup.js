@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-
 import CommonTextField from '../common/commonTextField/CommonTextField';
 import CommonButton from '../common/CommonButton/CommonButton';
 import InputPassword from '../common/InputPassword';
@@ -10,6 +9,7 @@ import { Link } from 'react-router-dom';
 export default function Signup() {
     const [form, setForm] = useState({});
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+    const [failedMessage, setFailedMessage] = useState(false);
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -17,10 +17,17 @@ export default function Signup() {
         },
         body: JSON.stringify(form),
     };
-
     const fetchUser = async () => {
         try {
-            await fetch('http://localhost:3001/createUser', requestOptions).then((response) => response.json());
+            await fetch('http://localhost:3001/createUser', requestOptions)
+                .then((response) => {
+                    if (!response.ok) {
+                        setFailedMessage(true);
+                        throw new Error(response.statusText);
+                    }
+                    return response.json();
+                })
+                .catch(console.error('Error 404'));
             setShowSuccessMessage(true);
         } catch (error) {
             console.error(error);
@@ -29,6 +36,9 @@ export default function Signup() {
     const handleSubmit = (e) => {
         e.preventDefault();
         fetchUser();
+        console.log(form.userPassword);
+        console.log('Failed message: ' + failedMessage);
+        console.log('Succes message: ' + showSuccessMessage);
     };
 
     return (
@@ -60,7 +70,7 @@ export default function Signup() {
                         textAlign: 'center',
                     }}
                 >
-                    {!showSuccessMessage && (
+                    {!showSuccessMessage && !failedMessage && (
                         <form onSubmit={handleSubmit}>
                             <CommonTextField
                                 value={form.userName}
@@ -104,7 +114,8 @@ export default function Signup() {
                             </CommonButton>
                         </form>
                     )}
-                    {showSuccessMessage && <SuccessMessage />}
+                    {!showSuccessMessage && failedMessage && <FailedMessage />}
+                    {showSuccessMessage && !failedMessage && <SuccessMessage />}
                 </Box>
             </Box>
         </>
@@ -115,8 +126,19 @@ function SuccessMessage() {
     return (
         <>
             <Box>You have been succesfully registered</Box>
+            <Link style={{ textDecoration: 'none' }} to={`/Login`}>
+                Go to Log in{' '}
+            </Link>
+        </>
+    );
+}
+
+function FailedMessage() {
+    return (
+        <>
+            <Box>Something gone wrong</Box>
             <Link style={{ textDecoration: 'none' }} to={`/`}>
-                Go to home page{' '}
+                Go home{' '}
             </Link>
         </>
     );
