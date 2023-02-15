@@ -21,7 +21,7 @@ app.use(
         secret: 'secret',
         resave: false,
         saveUninitialized: false,
-        cookie: { maxAge: oneDay, secure: true },
+        cookie: { maxAge: oneDay, secure: false },
     })
 );
 app.use(express.json());
@@ -31,7 +31,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 initAuthentication(app);
 app.use('/', apiRouter);
-
 
 app.listen(port, () => {
     console.log('Listen on port ' + port);
