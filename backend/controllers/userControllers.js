@@ -3,11 +3,10 @@ const bcrypt = require('bcrypt');
 const User = require('../db/models/user');
 const passport = require('passport');
 
-
 const saltRounds = 12;
 class UserController {
     passportLogin = passport.authenticate('local');
-    
+
     async createUser(req, res) {
         const userName = req.body.userName;
         const userSurname = req.body.userSurname;

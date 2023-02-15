@@ -19,7 +19,7 @@ export default function Signup() {
     };
     const fetchUser = async () => {
         try {
-            await fetch('http://localhost:3001/createUser', requestOptions)
+            await fetch('/createUser', requestOptions)
                 .then((response) => {
                     if (!response.ok) {
                         setFailedMessage(true);

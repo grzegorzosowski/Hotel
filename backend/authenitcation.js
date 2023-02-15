@@ -1,33 +1,36 @@
 const passport = require('passport');
-const session = require('express-session');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const User = require('./db/models/user');
 require('./db/mongoose');
 
-function initAuthentication(app) {
-    app.use(
-        session({
-            //secret: process.env.SESSION_SECRET,
-            secret: 'secret',
-            resave: false,
-            saveUninitialized: true,
-        })
-    );
 
+function initAuthentication(app) {
+    app.use(passport.session());
+    app.use(passport.initialize());
+    
     passport.use(new LocalStrategy(verify));
 
     passport.serializeUser((user, done) => {
+        console.log('SERIALIZEuser function STARTED');
+        process.nextTick(() => {
+            return done(null, {
+                uName: user.name,
+                uSurname: user.surname,
+                uEmail: user.email,
+            });
+        });
         console.log('Serialize user: ');
         console.log(user);
-        done(null, user.surname);
     });
 
-    passport.deserializeUser((email, done) => {
-        done(null, { email: email });
+    passport.deserializeUser((baseUser, done) => {
+        console.log('Deserialize user: ', baseUser);
+        User.findOne({ email: baseUser.uEmail }, (err, user) => {
+            console.log('FIND ONE AGAIN: ', err, user);
+            done(err, user);
+        });
     });
-    app.use(passport.initialize());
-    app.use(passport.session());
 }
 
 const verify = (userEmail, password, cb) => {

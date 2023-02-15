@@ -9,7 +9,7 @@ export default function Rooms() {
     React.useEffect(() => {
         const fetchRooms = async () => {
             try {
-                const response = await fetch('http://localhost:3001/getAllRoom');
+                const response = await fetch('/getAllRoom');
                 const data = await response.json();
                 setRooms(data);
             } catch (error) {

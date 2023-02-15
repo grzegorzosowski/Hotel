@@ -14,19 +14,19 @@ export default function Login() {
         },
         body: JSON.stringify({
             username: form.userEmail,
-            password: form.userPassword
+            password: form.userPassword,
         }),
     };
 
     const logUser = async () => {
         try {
-            await fetch('http://localhost:3001/login/password', requestOptions).then((response) => {
-                return response.json();
+            const success = await fetch('/login/password', requestOptions).then((response) => {
+                return response.status === 200;
             });
+            console.log('Login succes: ', success);
         } catch (error) {
             console.error(error);
         }
-        
     };
     const handleSubmit = (e) => {
         e.preventDefault();
