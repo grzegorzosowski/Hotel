@@ -4,11 +4,10 @@ const bcrypt = require('bcrypt');
 const User = require('./db/models/user');
 require('./db/mongoose');
 
-
 function initAuthentication(app) {
-    app.use(passport.session());
     app.use(passport.initialize());
-    
+    app.use(passport.session());
+
     passport.use(new LocalStrategy(verify));
 
     passport.serializeUser((user, done) => {
