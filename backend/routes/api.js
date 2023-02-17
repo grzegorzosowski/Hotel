@@ -4,25 +4,33 @@ const passport = require('passport');
 const RoomControllers = require('../controllers/roomsController');
 const UserController = require('../controllers/userControllers');
 
-//get all rooms
 router.get('/getAllRoom', RoomControllers.getAllRoom);
-//get room
 router.get('/getRoom/:nameRoom', RoomControllers.getRoom);
-//create new room
+router.get('/user', loggedIn, function (req, res, next) {
+    res.send(req.user);
+});
+
 router.post('/createRoom', RoomControllers.createRoom);
 router.post('/createUser', UserController.createUser);
-//router.post('/login/password', UserController.passportLogin);
+router.post('/editUserData', UserController.editUserData);
+router.post('/editUserPassword', UserController.editUserPassword);
 router.post(
     '/login/password',
     passport.authenticate('local', { failureRedirect: '/login', failureMessage: true }),
     function (req, res) {
-        console.log('AAAAAAAAAAAA', req.user);
         res.sendStatus(200);
     }
 );
-//edit room
+router.post('/logout', (req, res, next) => {
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+        res.sendStatus(200);
+    });
+});
+
 router.put('/editRoom/:id', RoomControllers.editRoom);
-//delete room
 router.delete('/deleteRoom/:id', RoomControllers.deleteRoom);
 
 function loggedIn(req, res, next) {
@@ -32,9 +40,5 @@ function loggedIn(req, res, next) {
         res.sendStatus(401);
     }
 }
-router.get('/user', loggedIn, function (req, res, next) {
-    console.log('User', req.user);
-    res.send(req.user);
-});
 
 module.exports = router;

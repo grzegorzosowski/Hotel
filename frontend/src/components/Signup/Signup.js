@@ -17,6 +17,7 @@ export default function Signup() {
         },
         body: JSON.stringify(form),
     };
+
     const fetchUser = async () => {
         try {
             await fetch('/createUser', requestOptions)
@@ -33,12 +34,10 @@ export default function Signup() {
             console.error(error);
         }
     };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         fetchUser();
-        console.log(form.userPassword);
-        console.log('Failed message: ' + failedMessage);
-        console.log('Succes message: ' + showSuccessMessage);
     };
 
     return (
@@ -97,11 +96,13 @@ export default function Signup() {
                                 value={form.userPassword}
                                 onChange={(event) => setForm({ ...form, userPassword: event.target.value })}
                                 text={'Password'}
+                                id={'Password'}
                             ></InputPassword>
                             <InputPassword
                                 value={form.userRepeatPassword}
                                 onChange={(event) => setForm({ ...form, userRepeatPassword: event.target.value })}
-                                text={'Repeat_password'}
+                                id={'Repeat_password'}
+                                text={'Repeat Password'}
                             ></InputPassword>
                             <CommonButton
                                 type="submit"

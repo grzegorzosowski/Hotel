@@ -1,12 +1,10 @@
 const { json } = require('body-parser');
 const bcrypt = require('bcrypt');
 const User = require('../db/models/user');
-const passport = require('passport');
+const session = require('express-session');
 
 const saltRounds = 12;
 class UserController {
-    passportLogin = passport.authenticate('local');
-
     async createUser(req, res) {
         const userName = req.body.userName;
         const userSurname = req.body.userSurname;
@@ -18,26 +16,64 @@ class UserController {
         try {
             if (userPassword === userRepeatPassword) {
                 const hashedPassword = await bcrypt.hash(userPassword, saltRounds);
-                console.log('Generated hash: ' + hashedPassword);
                 newUser = new User({
                     name: userName,
                     surname: userSurname,
                     email: userEmail,
                     password: hashedPassword,
                 });
-
                 await newUser.save().then(() => {
                     console.log('User has been created');
                 });
             } else {
-                console.log('Repeated password is not the same');
                 return res.status(404).json({ message: 'Repeated password is not the same' });
             }
         } catch (err) {
             return res.status(422).json({ message: err.message });
         }
+        return res.status(201).json(newUser);
+    }
 
-        res.status(201).json(newUser);
+    async editUserData(req, res) {
+        const userName = req.body.userName;
+        const userSurname = req.body.userSurname;
+        const userEmail = req.session.passport.user.uEmail;
+
+        try {
+            await User.updateOne({ email: userEmail }, { name: userName, surname: userSurname }, (err, res) => {
+                if (err) throw err;
+                console.log('1 document has been updated');
+            }).clone();
+        } catch (err) {
+            return res.status(422).json({ message: err.message });
+        }
+        res.status(201).json({ message: 'Edytowano użytkownika' });
+    }
+
+    async editUserPassword(req, res) {
+        const userEmail = req.session.passport.user.uEmail;
+        const userOldPassword = req.body.userOldPassword;
+        const userNewPassword = req.body.userNewPassword;
+        const userRepeatPassword = req.body.userRepeatPassword;
+        const getUser = await User.findOne({ email: userEmail }, (err, res) => {
+            if (err) throw err;
+        }).clone();
+
+        if (!(await bcrypt.compare(userOldPassword, getUser.password))) {
+            return res.status(404).json({ message: 'Old password is wrong' });
+        }
+        if (userNewPassword === userRepeatPassword) {
+            const hashedNewPassword = await bcrypt.hash(userNewPassword, saltRounds);
+            if (await bcrypt.compare(userNewPassword, getUser.password)) {
+                return res.status(404).json({ message: 'New password is the same as old password' });
+            } else {
+                await User.updateOne({ email: userEmail }, { password: hashedNewPassword }, (err, res) => {
+                    if (err) throw err;
+                }).clone();
+                return res.status(200).json({ message: 'Password updated!' });
+            }
+        }
+        return res.status(404).json({ message: 'Repeated password is not the same' });
     }
 }
 
