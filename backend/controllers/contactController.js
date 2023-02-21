@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-require('../../config');
+require('../config');
 
 class ContactController {
     async sendMessage(req, res) {

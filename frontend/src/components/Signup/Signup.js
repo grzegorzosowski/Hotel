@@ -14,6 +14,10 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 export default function Signup() {
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+    const [failedMessage, setFailedMessage] = useState(false);
+    const [userData, setUserData] = useState(null);
+
     const {
         register,
         handleSubmit,
@@ -29,10 +33,6 @@ export default function Signup() {
             return false;
         }
     };
-
-    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-    const [failedMessage, setFailedMessage] = useState(false);
-    const [userData, setUserData] = useState(null);
 
     const createUser = async (datas) => {
         try {
@@ -103,7 +103,6 @@ export default function Signup() {
                                 <TextField
                                     fullWidth
                                     sx={{ mb: '20px' }}
-                                    //onChange={(event) => setForm({ ...form, userName: event.target.value.trim() })}
                                     label="Name"
                                     type="text"
                                     size="small"
@@ -124,8 +123,6 @@ export default function Signup() {
                                 <TextField
                                     fullWidth
                                     sx={{ mb: '20px' }}
-                                    //value={form.userSurname}
-                                    //onChange={(event) => setForm({ ...form, userSurname: event.target.value.trim() })}
                                     label="Surname"
                                     type="text"
                                     size="small"
@@ -146,8 +143,6 @@ export default function Signup() {
                                 <TextField
                                     fullWidth
                                     sx={{ mb: '20px' }}
-                                    //value={form.userEmail}
-                                    //onChange={(event) => setForm({ ...form, userEmail: event.target.value.trim() })}
                                     label="Email"
                                     size="small"
                                     {...register('userEmail', {
@@ -170,7 +165,6 @@ export default function Signup() {
                                     <OutlinedInput
                                         id="password"
                                         type={showPassword ? 'text' : 'password'}
-                                        //onChange={(event) => setForm({ ...form, userPassword: event.target.value })}
                                         endAdornment={
                                             <InputAdornment position="end">
                                                 <IconButton
@@ -203,7 +197,6 @@ export default function Signup() {
                                     <OutlinedInput
                                         id="password_repeat"
                                         type={showPassword ? 'text' : 'password'}
-                                        //onChange={(event) =>setForm({ ...form, userRepeatPassword: event.target.value })}
                                         endAdornment={
                                             <InputAdornment position="end">
                                                 <IconButton
@@ -230,7 +223,7 @@ export default function Signup() {
                                         {errors?.userEmail && <span role="alert">{errors.userEmail.message}</span>}
                                         {errors?.userPassword && <span role="alert">{errors.userPassword.message}</span>}
                                         {errors?.userRepeatPassword && errors.userRepeatPassword.type === 'validate' && (
-                                            <p>The passwords do not match.</p>
+                                            <p>The passwords are not the same.</p>
                                         )}
                                     </Box>
                                 )}
@@ -268,7 +261,6 @@ export default function Signup() {
         const handleButton = () => {
             setFailedMessage(false);
             setShowSuccessMessage(false);
-            console.log('Cofnięto');
         };
         return (
             <>

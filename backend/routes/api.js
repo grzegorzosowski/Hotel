@@ -2,7 +2,7 @@ const express = require('express');
 require('dotenv').config();
 const router = express.Router();
 const passport = require('passport');
-const ContactController = require('../controllers/api/contactController');
+const ContactController = require('../controllers/contactController');
 const RoomControllers = require('../controllers/roomsController');
 const UserController = require('../controllers/userControllers');
 
