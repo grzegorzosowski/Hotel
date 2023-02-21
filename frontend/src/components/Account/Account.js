@@ -36,7 +36,6 @@ export default function Account() {
                     return response.json();
                 })
                 .catch(console.error('Error 404'));
-            setShowSuccessMessage(true);
             console.log('User has been edited');
             window.location.reload();
         } catch (error) {
@@ -46,34 +45,34 @@ export default function Account() {
 
     const fetchEditUserPass = async () => {
         try {
-            await fetch('/editUserPassword', requestOptions)
-                .then((response) => {
-                    if (!response.ok) {
-                        setFailedMessage(true);
-                        throw new Error(response.statusText);
-                    }
-                    return response.json();
-                })
-                .catch(console.error('Error 404'));
-            setShowSuccessMessage(true);
-            window.location.reload();
+            if (form.userNewPassword === form.userRepeatPassword) {
+                const response = await fetch('/editUserPassword', requestOptions);
+                if (!response.ok) {
+                    setFailedMessage(true);
+                    throw new Error(response.statusText);
+                }
+                return response.json();
+            }
         } catch (error) {
             console.error(error);
         }
     };
 
-    const handleSubmitData = (e) => {
+    const handleSubmitData = async (e) => {
         e.preventDefault();
-        fetchEditUserData();
+        await fetchEditUserData();
     };
-    const handleSubmitPassword = (e) => {
+
+    const handleSubmitPassword = async (e) => {
         e.preventDefault();
-        fetchEditUserPass();
+        await fetchEditUserPass();
     };
+
     function handleEditData() {
         setEditUserData(true);
         setEditUserPassword(false);
     }
+
     function handleEditPassword() {
         setEditUserData(false);
         setEditUserPassword(true);
@@ -183,20 +182,25 @@ export default function Account() {
             </Box>
         </>
     );
-}
+    function SuccessMessage() {
+        return (
+            <>
+                <Box>Data edited succesfully</Box>
+            </>
+        );
+    }
 
-function SuccessMessage() {
-    return (
-        <>
-            <Box>Data edited succesfully</Box>
-        </>
-    );
-}
-
-function FailedMessage() {
-    return (
-        <>
-            <Box>Something gone wrong</Box>
-        </>
-    );
+    function FailedMessage() {
+        const handleButton = () => {
+            setFailedMessage(false);
+            setShowSuccessMessage(false);
+            console.log('Cofnięto');
+        };
+        return (
+            <>
+                <Box>Something gone wrong</Box>
+                <CommonButton onClick={handleButton}> Go back </CommonButton>
+            </>
+        );
+    }
 }

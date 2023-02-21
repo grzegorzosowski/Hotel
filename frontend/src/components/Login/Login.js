@@ -23,8 +23,7 @@ export default function Login() {
             const res = await fetch('/login/password', requestOptions);
             const success = res.status === 200;
             if (success) {
-                const userReq = await fetch('/user', { method: 'get' });
-                const user = await userReq.json();
+                await fetch('/user', { method: 'get' });
                 window.location.replace('/');
             }
         } catch (error) {

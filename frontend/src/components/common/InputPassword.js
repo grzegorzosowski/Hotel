@@ -7,7 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-export default function InputPassword({ text, id, onChange }) {
+export default function InputPassword({ text, id, onChange, name, }) {
     const [showPassword, setShowPassword] = React.useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -37,6 +37,8 @@ export default function InputPassword({ text, id, onChange }) {
                     </InputAdornment>
                 }
                 label={text}
+                name={name}
+                
             />
         </FormControl>
     );

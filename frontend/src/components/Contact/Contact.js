@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 
 import CommonTextField from '../common/commonTextField/CommonTextField';
@@ -7,6 +7,28 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 function Contact() {
+    const [form, setForm] = useState({});
+    const [messageSent, setMessageSent] = useState(false);
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json',
+        },
+        body: JSON.stringify(form),
+    };
+
+    const sendMessage = async () => {
+        const response = await fetch('/sendMessage', requestOptions);
+        if (response.ok) {
+            setMessageSent(true);
+            console.log(response.status);
+        } else console.log('No response');  
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await sendMessage();
+    };
     return (
         <>
             <Box
@@ -36,21 +58,36 @@ function Contact() {
                         {' '}
                         Send us a message
                     </Typography>
-                    <form>
-                        <CommonTextField label="Email" type="email" size="small"></CommonTextField>
-                        <TextField fullWidth multiline rows={5} label="Message" size="small">
-                            {' '}
-                        </TextField>
-                        <CommonButton
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            size="large"
-                            sx={{ px: 5, mt: 3 }}
-                        >
-                            Send
-                        </CommonButton>
-                    </form>
+                    {!messageSent && (
+                        <form onSubmit={handleSubmit}>
+                            <CommonTextField
+                                onChange={(event) => setForm({ ...form, userEmail: event.target.value.trim() })}
+                                label="Email"
+                                type="email"
+                                size="small"
+                            ></CommonTextField>
+                            <TextField
+                                onChange={(event) => setForm({ ...form, userMessage: event.target.value })}
+                                fullWidth
+                                multiline
+                                rows={5}
+                                label="Message"
+                                size="small"
+                            >
+                                {' '}
+                            </TextField>
+                            <CommonButton
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                size="large"
+                                sx={{ px: 5, mt: 3 }}
+                            >
+                                Send
+                            </CommonButton>
+                        </form>
+                    )}
+                    {messageSent && (<Typography>Message has been sent</Typography>)}
                 </Box>
             </Box>
         </>

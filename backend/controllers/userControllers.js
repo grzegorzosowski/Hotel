@@ -1,7 +1,5 @@
-const { json } = require('body-parser');
 const bcrypt = require('bcrypt');
 const User = require('../db/models/user');
-const session = require('express-session');
 
 const saltRounds = 12;
 class UserController {
@@ -14,6 +12,12 @@ class UserController {
         let newUser;
 
         try {
+            const checkUserExist = await User.findOne({ email: userEmail }, (err, res) => {
+                if (err) return err;
+            }).clone();
+            if (checkUserExist) {
+                return res.status(422).json({ message: 'This email already exists inside our user database' });
+            }
             if (userPassword === userRepeatPassword) {
                 const hashedPassword = await bcrypt.hash(userPassword, saltRounds);
                 newUser = new User({
@@ -31,7 +35,7 @@ class UserController {
         } catch (err) {
             return res.status(422).json({ message: err.message });
         }
-        return res.status(201).json(newUser);
+        return res.status(201).json('User created successfully');
     }
 
     async editUserData(req, res) {

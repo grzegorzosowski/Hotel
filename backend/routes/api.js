@@ -1,6 +1,8 @@
 const express = require('express');
+require('dotenv').config();
 const router = express.Router();
 const passport = require('passport');
+const ContactController = require('../controllers/api/contactController');
 const RoomControllers = require('../controllers/roomsController');
 const UserController = require('../controllers/userControllers');
 
@@ -10,6 +12,7 @@ router.get('/user', loggedIn, function (req, res, next) {
     res.send(req.user);
 });
 
+router.post('/sendMessage', ContactController.sendMessage);
 router.post('/createRoom', RoomControllers.createRoom);
 router.post('/createUser', UserController.createUser);
 router.post('/editUserData', UserController.editUserData);
