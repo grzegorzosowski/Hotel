@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import CommonButton from '../common/CommonButton/CommonButton';
-import { TextField } from '@mui/material';
+import { FormHelperText, TextField } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -24,28 +24,18 @@ export default function Signup() {
         formState: { errors },
         watch,
     } = useForm();
-    const password = useRef({});
-    password.current = watch('userPassword', '');
-    const validatePassword = (value) => {
-        if (value === password.current) {
-            return true;
-        } else {
-            return false;
-        }
-    };
 
-    const createUser = async (datas) => {
+    const onSubmit = async (formData) => {
         try {
-            const requestOptions = {
+            const { userRepeatPassword, ...toSend } = formData; //get required fields only, except userRepeatPassword
+            const response = await fetch('/createUser', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json',
                 },
-                body: datas,
-            };
-            const response = await fetch('/createUser', requestOptions);
-            const data = await response.json();
-            setUserData(data);
+                body: JSON.stringify(toSend),
+            });
+            setUserData(await response.json());
             if (!response.ok) {
                 setFailedMessage(true);
                 throw new Error(response.statusText);
@@ -56,217 +46,203 @@ export default function Signup() {
         }
     };
 
-    const onSubmit = (data) => {
-        createUser(JSON.stringify(data));
-    };
-
     const [showPassword, setShowPassword] = useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
+    return (
+        <Container>
+            {!showSuccessMessage && failedMessage ? (
+                <FailedMessage
+                    userData={userData.message}
+                    handleButton={() => {
+                        setFailedMessage(false);
+                        setShowSuccessMessage(false);
+                    }}
+                ></FailedMessage>
+            ) : showSuccessMessage && !failedMessage ? (
+                <SuccessMessage />
+            ) : (
+                <>
+                    <Typography variant="h4" gutterBottom>
+                        {' '}
+                        Create account
+                    </Typography>
+                    <Box
+                        sx={{
+                            width: 1,
+                            maxWidth: '100%',
+                            textAlign: 'center',
+                        }}
+                        component="form"
+                        onSubmit={handleSubmit(onSubmit)}
+                    >
+                        <TextField
+                            fullWidth
+                            sx={{ mb: '20px' }}
+                            label="Name"
+                            type="text"
+                            size="small"
+                            inputProps={{ maxLength: 25 }}
+                            {...register('userName', {
+                                required: 'Name is required',
+                                max: 25,
+                                minLength: {
+                                    value: 2,
+                                    message: 'Name minimum length is 2',
+                                },
+                                maxLength: {
+                                    value: 25,
+                                    message: 'Name maximum length is 25',
+                                },
+                            })}
+                            helperText={errors?.userName?.message}
+                            error={errors?.userName}
+                        />
+                        <TextField
+                            fullWidth
+                            sx={{ mb: '20px' }}
+                            label="Surname"
+                            type="text"
+                            size="small"
+                            inputProps={{ maxLength: 25 }}
+                            {...register('userSurname', {
+                                required: 'Surname is required',
+                                max: 25,
+                                minLength: {
+                                    value: 2,
+                                    message: 'Surname minimum length is 2',
+                                },
+                                maxLength: {
+                                    value: 25,
+                                    message: 'Surname maximum length is 25',
+                                },
+                            })}
+                            helperText={errors?.userSurname?.message}
+                            error={errors?.userSurname}
+                        />
+                        <TextField
+                            fullWidth
+                            sx={{ mb: '20px' }}
+                            label="Email"
+                            size="small"
+                            {...register('userEmail', {
+                                required: 'Email is required',
+                                pattern: {
+                                    value: /\S+@\S+\.\S+/,
+                                    message: 'Entered email does not match to email format',
+                                },
+                            })}
+                            helperText={errors?.userEmail?.message}
+                            error={errors?.userEmail}
+                        />
+                        <PasswordInput
+                            title="Password"
+                            showPassword={showPassword}
+                            handleClickShowPassword={handleClickShowPassword}
+                            error={errors?.userPassword?.message}
+                            inputProps={register('userPassword', {
+                                required: 'Password is required',
+                                minLength: 'Minimum password length is 8',
+                            })}
+                        />
+                        <PasswordInput
+                            title="Password Repeat"
+                            showPassword={showPassword}
+                            handleClickShowPassword={handleClickShowPassword}
+                            error={
+                                errors?.userRepeatPassword &&
+                                errors.userRepeatPassword.type === 'validate' &&
+                                'The passwords are not the same.'
+                            }
+                            inputProps={register('userRepeatPassword', {
+                                validate: (value) => value === watch('userPassword', ''),
+                            })}
+                        />
+                        <CommonButton
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            sx={{ px: 5, mt: 1 }}
+                        >
+                            Signup
+                        </CommonButton>
+                    </Box>
+                </>
+            )}
+        </Container>
+    );
+}
 
+function SuccessMessage() {
     return (
         <>
-            <Box
-                sx={{
-                    mt: 12,
-                    width: 3 / 10,
-                    minWidth: '240px',
-                    padding: 3,
-                    display: {
-                        xs: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        backgroundColor: 'rgba(240, 248, 255, 1)',
-                        boxShadow: '0 0 20px aliceblue',
-                        borderRadius: 5,
-                    },
-                }}
-            >
-                {!showSuccessMessage && !failedMessage && (
-                    <>
-                        <Typography variant="h4" gutterBottom>
-                            {' '}
-                            Create account
-                        </Typography>
-                        <Box
-                            sx={{
-                                width: 1,
-                                maxWidth: '100%',
-                                textAlign: 'center',
-                            }}
-                        >
-                            <form onSubmit={handleSubmit(onSubmit)}>
-                                <TextField
-                                    fullWidth
-                                    sx={{ mb: '20px' }}
-                                    label="Name"
-                                    type="text"
-                                    size="small"
-                                    inputProps={{ maxLength: 25 }}
-                                    {...register('userName', {
-                                        required: 'Name is required',
-                                        max: 25,
-                                        minLength: {
-                                            value: 2,
-                                            message: 'Name minimum length is 2',
-                                        },
-                                        maxLength: {
-                                            value: 25,
-                                            message: 'Name maximum length is 25',
-                                        },
-                                    })}
-                                ></TextField>
-                                <TextField
-                                    fullWidth
-                                    sx={{ mb: '20px' }}
-                                    label="Surname"
-                                    type="text"
-                                    size="small"
-                                    inputProps={{ maxLength: 25 }}
-                                    {...register('userSurname', {
-                                        required: 'Surname is required',
-                                        max: 25,
-                                        minLength: {
-                                            value: 2,
-                                            message: 'Surname minimum length is 2',
-                                        },
-                                        maxLength: {
-                                            value: 25,
-                                            message: 'Surname maximum length is 25',
-                                        },
-                                    })}
-                                ></TextField>
-                                <TextField
-                                    fullWidth
-                                    sx={{ mb: '20px' }}
-                                    label="Email"
-                                    size="small"
-                                    {...register('userEmail', {
-                                        required: 'Email is required',
-                                        pattern: {
-                                            value: /\S+@\S+\.\S+/,
-                                            message: 'Entered email does not match to email format',
-                                        },
-                                    })}
-                                ></TextField>
-                                <FormControl
-                                    sx={{ width: 1, mb: '20px' }}
-                                    size="small"
-                                    variant="outlined"
-                                    id="password"
-                                >
-                                    <InputLabel htmlFor="outlined-adornment-password" id="password">
-                                        Password
-                                    </InputLabel>
-                                    <OutlinedInput
-                                        id="password"
-                                        type={showPassword ? 'text' : 'password'}
-                                        endAdornment={
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    aria-label="toggle password visibility"
-                                                    onClick={handleClickShowPassword}
-                                                    onMouseDown={handleMouseDownPassword}
-                                                    edge="end"
-                                                >
-                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        }
-                                        label="Password"
-                                        name="password"
-                                        {...register('userPassword', {
-                                            required: 'Password is required',
-                                            minLength: 'Minimum password length is 8',
-                                        })}
-                                    />
-                                </FormControl>
-                                <FormControl
-                                    sx={{ width: 1, mb: '20px' }}
-                                    size="small"
-                                    variant="outlined"
-                                    id="password_repeat"
-                                >
-                                    <InputLabel htmlFor="outlined-adornment-password" id="password_repeat">
-                                        Password Repeat
-                                    </InputLabel>
-                                    <OutlinedInput
-                                        id="password_repeat"
-                                        type={showPassword ? 'text' : 'password'}
-                                        endAdornment={
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    aria-label="toggle password visibility"
-                                                    onClick={handleClickShowPassword}
-                                                    onMouseDown={handleMouseDownPassword}
-                                                    edge="end"
-                                                >
-                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        }
-                                        label="Password Repeat"
-                                        name="password_repeat"
-                                        {...register('userRepeatPassword', {
-                                            validate: validatePassword,
-                                        })}
-                                    />
-                                </FormControl>
-                                {errors && (
-                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                        {errors?.userName && <span>{errors.userName.message}</span>}
-                                        {errors?.userSurname && <span>{errors.userSurname.message}</span>}
-                                        {errors?.userEmail && <span role="alert">{errors.userEmail.message}</span>}
-                                        {errors?.userPassword && <span role="alert">{errors.userPassword.message}</span>}
-                                        {errors?.userRepeatPassword && errors.userRepeatPassword.type === 'validate' && (
-                                            <p>The passwords are not the same.</p>
-                                        )}
-                                    </Box>
-                                )}
-                                <CommonButton
-                                    type="submit"
-                                    variant="contained"
-                                    color="primary"
-                                    size="large"
-                                    sx={{ px: 5, mt: 1 }}
-                                >
-                                    Signup
-                                </CommonButton>
-                            </form>
-                        </Box>
-                    </>
-                )}
-                {!showSuccessMessage && failedMessage && <FailedMessage userData={userData.message}></FailedMessage>}
-                {showSuccessMessage && !failedMessage && <SuccessMessage />}
-            </Box>
+            <Box>Successfully signed up</Box>
+            <Link style={{ textDecoration: 'none' }} to={`/Login`}>
+                Go to Log in
+            </Link>
         </>
     );
+}
 
-    function SuccessMessage() {
-        return (
-            <>
-                <Box>Successfully signed up</Box>
-                <Link style={{ textDecoration: 'none' }} to={`/Login`}>
-                    Go to Log in
-                </Link>
-            </>
-        );
-    }
+function FailedMessage({ userData, handleButton }) {
+    return (
+        <>
+            <Box>{userData}</Box>
+            <CommonButton onClick={handleButton}> Go back </CommonButton>
+        </>
+    );
+}
 
-    function FailedMessage({ userData }) {
-        const handleButton = () => {
-            setFailedMessage(false);
-            setShowSuccessMessage(false);
-        };
-        return (
-            <>
-                <Box>{userData}</Box>
-                <CommonButton onClick={handleButton}> Go back </CommonButton>
-            </>
-        );
-    }
+function Container({ children }) {
+    return (
+        <Box
+            sx={{
+                mt: 12,
+                width: 3 / 10,
+                minWidth: '240px',
+                padding: 3,
+                display: {
+                    xs: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    backgroundColor: 'rgba(240, 248, 255, 1)',
+                    boxShadow: '0 0 20px aliceblue',
+                    borderRadius: 5,
+                },
+            }}
+        >
+            {children}
+        </Box>
+    );
+}
+
+function PasswordInput({ title, showPassword, handleClickShowPassword, error, inputProps }) {
+    return (
+        <FormControl sx={{ width: 1, mb: '20px' }} size="small" variant="outlined">
+            <InputLabel>{title}</InputLabel>
+            <OutlinedInput
+                type={showPassword ? 'text' : 'password'}
+                label={title}
+                endAdornment={
+                    <InputAdornment position="end">
+                        <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={(event) => {
+                                event.preventDefault();
+                            }}
+                            edge="end"
+                        >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                    </InputAdornment>
+                }
+                error={Boolean(error)}
+                {...inputProps}
+            />
+            {error && <FormHelperText error>{error}</FormHelperText>}
+        </FormControl>
+    );
 }
