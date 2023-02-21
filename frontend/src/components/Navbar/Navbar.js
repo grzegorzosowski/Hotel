@@ -17,7 +17,8 @@ import { Link } from 'react-router-dom';
 import { useUser } from '../../UserProvider';
 
 const pages = ['About', 'Rooms', 'Contact'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const userSettings = ['Profile', 'Account', 'Logout'];
+const adminSettings = ['Profile', 'Account', 'Manager', 'Logout'];
 
 const options2 = [
     {
@@ -32,8 +33,7 @@ const options2 = [
 
 function Navbar() {
     const user = useUser();
-    const isLogged = user != null;
-
+    const isLogged = !!user;
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -171,11 +171,27 @@ function Navbar() {
                                 open={Boolean(anchorElUser)}
                                 onClose={handleCloseUserMenu}
                             >
-                                {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                        <Typography textAlign="center">{setting}</Typography>
-                                    </MenuItem>
-                                ))}
+                                {user.roles !== 'admin'
+                                    ? userSettings.map((setting) => (
+                                          <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                              <Link
+                                                  style={{ textDecoration: 'none', color: 'black' }}
+                                                  to={`/${setting}`}
+                                              >
+                                                  {setting}{' '}
+                                              </Link>
+                                          </MenuItem>
+                                      ))
+                                    : adminSettings.map((setting) => (
+                                          <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                              <Link
+                                                  style={{ textDecoration: 'none', color: 'black' }}
+                                                  to={`/${setting}`}
+                                              >
+                                                  {setting}{' '}
+                                              </Link>
+                                          </MenuItem>
+                                      ))}
                             </Menu>
                         </Box>
                     ) : (

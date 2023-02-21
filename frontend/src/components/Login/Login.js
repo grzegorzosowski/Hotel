@@ -4,11 +4,9 @@ import CommonTextField from '../common/commonTextField/CommonTextField';
 import CommonButton from '../common/CommonButton/CommonButton';
 import InputPassword from '../common/InputPassword';
 import Typography from '@mui/material/Typography';
-import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
     const [form, setForm] = useState({});
-    const navigate = useNavigate();
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -24,23 +22,21 @@ export default function Login() {
         try {
             const res = await fetch('/login/password', requestOptions);
             const success = res.status === 200;
-            console.log('Login succes: ', success);
             if (success) {
-                const userReq = await fetch('/user', { method: 'get' });
-                const user = await userReq.json();
-                console.log('🚀 ~ file: Login.js:30 ~ logUser ~ user', user);
-                // eslint-disable-next-line no-restricted-globals
-                location.replace('/'); //TODO use react-router-dom
+                await fetch('/user', { method: 'get' });
+                window.location.replace('/');
             }
         } catch (error) {
+            console.log('Some error during logging');
             console.error(error);
         }
     };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         logUser();
-        console.log(form.userEmail + '  ' + form.userPassword);
     };
+
     return (
         <>
             <Box

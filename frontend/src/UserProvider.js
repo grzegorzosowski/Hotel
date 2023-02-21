@@ -1,20 +1,25 @@
-import React from 'react';
 
-const Context = React.createContext({});
+
+
+import React from 'react';
+import { useContext, useEffect, useState, createContext } from 'react';
+
+const Context = createContext({});
 
 export function useUser() {
-    return React.useContext(Context);
+    return useContext(Context);
 }
 
 export function UserProvider({ children }) {
-    const [user, setUser] = React.useState(undefined);
-    const [isLoading, setIsLoading] = React.useState(true);
+    const [user, setUser] = useState(undefined);
+    const [isLoading, setIsLoading] = useState(true);
 
-    React.useEffect(() => {
+    useEffect(() => {
         setIsLoading(true);
         fetch('/user', { method: 'get' })
             .then((res) => res.json())
             .then((user) => {
+                console.log("USE EFFECT SIĘ WYKONAŁ")
                 setUser(user);
             })
             .catch((err) => {
@@ -23,7 +28,7 @@ export function UserProvider({ children }) {
             .finally(() => setIsLoading(false));
     }, []);
 
-    React.useEffect(() => {
+    useEffect(() => {
         console.log('USER', user);
     }, [user]);
 

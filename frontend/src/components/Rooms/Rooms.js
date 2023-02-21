@@ -1,6 +1,6 @@
 import React from 'react';
 import Room from './Room/Room';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import { Box } from '@mui/material';
 

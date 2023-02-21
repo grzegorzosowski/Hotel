@@ -17,7 +17,6 @@ const path = require('path');
 app.use(cookieParser());
 app.use(
     session({
-        //secret: process.env.SESSION_SECRET,
         secret: 'secret',
         resave: false,
         saveUninitialized: false,
