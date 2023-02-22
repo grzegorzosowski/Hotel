@@ -35,6 +35,7 @@ const verify = async (userEmail, password, cb) => {
             return cb(null, false);
         }
         if (!(await bcrypt.compare(password, user.password))) {
+            console.log('Wrong password');
             return cb(null, false);
         }
         console.log('User has been founded');

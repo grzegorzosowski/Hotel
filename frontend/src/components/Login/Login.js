@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 
 export default function Login() {
     const [form, setForm] = useState({});
+    const [wrongPwd, setWrongPwd] = useState(false);
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -26,6 +27,7 @@ export default function Login() {
                 await fetch('/user', { method: 'get' });
                 window.location.replace('/');
             }
+            setWrongPwd(true);
         } catch (error) {
             console.log('Some error during logging');
             console.error(error);
@@ -42,7 +44,7 @@ export default function Login() {
             <Box
                 sx={{
                     mt: 12,
-                    width: 3 / 10,
+                    width: 3 / 12,
                     minWidth: '240px',
                     padding: 3,
                     display: {
@@ -65,7 +67,7 @@ export default function Login() {
                         textAlign: 'center',
                     }}
                 >
-                    <form onSubmit={handleSubmit}>
+                    <Box component="form" onSubmit={handleSubmit}>
                         <CommonTextField
                             value={form.userEmail}
                             onChange={(event) => setForm({ ...form, userEmail: event.target.value })}
@@ -78,6 +80,7 @@ export default function Login() {
                             onChange={(event) => setForm({ ...form, userPassword: event.target.value })}
                             text={'Password'}
                         ></InputPassword>
+                        {wrongPwd && <Box>WRONG PASSWORD</Box>}
                         <CommonButton
                             type="submit"
                             variant="contained"
@@ -87,7 +90,7 @@ export default function Login() {
                         >
                             Login
                         </CommonButton>
-                    </form>
+                    </Box>
                 </Box>
             </Box>
         </>

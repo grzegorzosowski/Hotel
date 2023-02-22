@@ -38,7 +38,6 @@ class UserController {
         const userName = req.body.userName;
         const userSurname = req.body.userSurname;
         const userEmail = req.session.passport.user.uEmail;
-
         try {
             await User.updateOne({ email: userEmail }, { name: userName, surname: userSurname }, (err, res) => {
                 if (err) throw err;

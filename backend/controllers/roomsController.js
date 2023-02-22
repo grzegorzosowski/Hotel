@@ -23,6 +23,24 @@ class RoomController {
         res.status(201).json(newRoom);
     }
 
+    async availableRooms(req, res) {
+        const inDay = req.body.dateIn.day;
+        const inMonth = req.body.dateIn.month;
+        const inYear = req.body.dateIn.year;
+        const outDay = req.body.dateOut.day;
+        const outMonth = req.body.dateOut.month;
+        const outYear = req.body.dateOut.year;
+        let doc;
+        try {
+            doc = await Room.find({});
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json({ message: err.message });
+        }
+        res.status(200).json(doc);
+        //return res.json({ message: 'Wybrane daty to: ', przyjazd: req.body.dateIn, wyjazd: req.body.dateOut });
+    }
+
     async getAllRoom(req, res) {
         let doc;
         try {
@@ -31,7 +49,6 @@ class RoomController {
             console.log(err);
             return res.status(500).json({ message: err.message });
         }
-        console.log(doc);
         res.status(200).json(doc);
     }
 

@@ -51,6 +51,7 @@ export default function Account() {
                     setFailedMessage(true);
                     throw new Error(response.statusText);
                 }
+                setShowSuccessMessage(true);
                 return response.json();
             }
         } catch (error) {

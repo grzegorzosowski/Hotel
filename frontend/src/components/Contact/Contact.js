@@ -22,7 +22,7 @@ function Contact() {
         if (response.ok) {
             setMessageSent(true);
             console.log(response.status);
-        } else console.log('No response');  
+        } else console.log('No response');
     };
 
     const handleSubmit = async (e) => {
@@ -59,7 +59,7 @@ function Contact() {
                         Send us a message
                     </Typography>
                     {!messageSent && (
-                        <form onSubmit={handleSubmit}>
+                        <Box component="form" onSubmit={handleSubmit}>
                             <CommonTextField
                                 onChange={(event) => setForm({ ...form, userEmail: event.target.value.trim() })}
                                 label="Email"
@@ -85,9 +85,9 @@ function Contact() {
                             >
                                 Send
                             </CommonButton>
-                        </form>
+                        </Box>
                     )}
-                    {messageSent && (<Typography>Message has been sent</Typography>)}
+                    {messageSent && <Typography>Message has been sent</Typography>}
                 </Box>
             </Box>
         </>

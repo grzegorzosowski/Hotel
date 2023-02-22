@@ -14,6 +14,7 @@ router.get('/user', loggedIn, function (req, res, next) {
 
 router.post('/sendMessage', ContactController.sendMessage);
 router.post('/createRoom', RoomControllers.createRoom);
+router.post('/availableRooms', RoomControllers.availableRooms);
 router.post('/createUser', UserController.createUser);
 router.post('/editUserData', UserController.editUserData);
 router.post('/editUserPassword', UserController.editUserPassword);
