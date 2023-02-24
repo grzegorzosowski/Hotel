@@ -7,6 +7,7 @@ import BasicDatePicker from '../DatePicker/DatePicker';
 
 export default function Rooms() {
     const [rooms, setRooms] = useState([]);
+    const [firstLoad, setFirstLoad] = useState(false);
     const [dateIn, setDateIn] = useState(null);
     const [dateOut, setDateOut] = useState(null);
     const requestOptions = {
@@ -15,22 +16,42 @@ export default function Rooms() {
             'Content-type': 'application/json',
         },
         body: JSON.stringify({
-            dateIn: { day: dateIn.$D, month: dateIn.$M + 1, year: dateIn.$y },
-            dateOut: { day: dateOut.$D, month: dateOut.$M + 1, year: dateOut.$y },
+            dateIn: dateIn,
+            dateOut: dateOut,
         }),
     };
+
+    React.useEffect(() => {
+        const fetchRooms = async () => {
+            try {
+                const response = await fetch('/getAllRoom');
+                const data = await response.json();
+                setRooms(data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        if (!firstLoad) {
+            fetchRooms();
+        } else {
+            setFirstLoad(true);
+        }
+        if (firstLoad) {
+            setRooms([]);
+        }
+    }, [firstLoad]);
+
     const fetchFindAvailableRooms = async () => {
         try {
-            const response = await fetch('/availableRooms', requestOptions);
+            const response = await fetch('/checkReservation', requestOptions);
             const data = await response.json();
-            setRooms(data);
+            console.log('🚀 ~ file: Rooms.js:44', data);
         } catch (error) {
             console.log(error);
         }
     };
 
     const handleSearch = () => {
-        console.log(dateIn.$D, '.', dateIn.$M + 1, '.', dateIn.$y);
         fetchFindAvailableRooms();
     };
 
@@ -45,8 +66,8 @@ export default function Rooms() {
     return (
         <Box sx={{ width: 1, boxSizing: 'border-box' }}>
             <Box sx={{ display: 'flex', justifyContent: 'center', backgroundColor: 'rgba(255,255,255,0.8)' }}>
-                <BasicDatePicker onDateChange={handleDateInChange} />
-                <BasicDatePicker onDateChange={handleDateOutChange} />
+                {/* <BasicDatePicker onDateChange={handleDateInChange} labelText='Check in' />
+                <BasicDatePicker onDateChange={handleDateOutChange} labelText='Check out'  /> */}
                 <CommonButton
                     onClick={handleSearch}
                     type="submit"
@@ -61,6 +82,7 @@ export default function Rooms() {
             {rooms.map((room) => (
                 <Room key={room.name} name={room.name} type={room.type} beds={room.beds} />
             ))}
+
         </Box>
     );
 }

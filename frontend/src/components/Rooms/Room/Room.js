@@ -2,10 +2,9 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import logo from './room1.jpeg';
-import CommonButton from '../../common/CommonButton/CommonButton';
+import CommonModal from '../../BookModal/BookModal';
 
 function Room(props) {
-    const handleButton = () => {};
     return (
         <>
             <Box
@@ -46,28 +45,19 @@ function Room(props) {
                         cupidatat occaecat duis duis. Consectetur ullamco duis nulla dolor.
                     </Typography>
                     {props.beds ? (
-                        <CommonButton onClick={handleButton} size={'small'} variant={'contained'} type={'button'}>
-                            Book
-                        </CommonButton>
+                        <CommonModal nameRoom={props.name}></CommonModal>
                     ) : (
                         <Typography variant="h6" mb="5px">
                             No rooms available
                         </Typography>
                     )}
+                    
                 </Box>
                 <Box sx={{ width: '50%', textAlign: 'center' }}>
                     <img src={logo} width="600px" height="600px" alt="Room" />
                 </Box>
             </Box>
         </>
-
-        // <div className="single-room-box">
-        //     <div className="room-img">Tu będzie zdjęcie</div>
-        //     <div className="room-name">{props.name}</div>
-        //     <div className="room-type">Typ: {props.type}</div>
-        //     <div className="room-beds">Ilość miejsc: {props.beds}</div>
-        //     <p className="room-description">Tu będzie krótki opis pokoju</p>
-        // </div>
     );
 }
 

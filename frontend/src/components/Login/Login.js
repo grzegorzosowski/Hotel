@@ -25,9 +25,10 @@ export default function Login() {
             const success = res.status === 200;
             if (success) {
                 await fetch('/user', { method: 'get' });
-                window.location.replace('/');
+                window.location.replace('/Rooms');
+            } else {
+                setWrongPwd(true);
             }
-            setWrongPwd(true);
         } catch (error) {
             console.log('Some error during logging');
             console.error(error);
