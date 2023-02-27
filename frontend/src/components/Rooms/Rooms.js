@@ -3,13 +3,13 @@ import Room from './Room/Room';
 import CommonButton from '../common/CommonButton/CommonButton';
 import { useState } from 'react';
 import { Box } from '@mui/material';
-import BasicDatePicker from '../DatePicker/DatePicker';
+import BasicDatePicker from '../BasicDatePicker/BasicDatePicker';
 
 export default function Rooms() {
     const [rooms, setRooms] = useState([]);
     const [firstLoad, setFirstLoad] = useState(false);
-    const [dateIn, setDateIn] = useState(null);
-    const [dateOut, setDateOut] = useState(null);
+    const [dateIn, setDateIn] = useState(new Date());
+    const [dateOut, setDateOut] = useState(new Date(new Date().setDate(new Date().getDate() + 1)));
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -27,18 +27,14 @@ export default function Rooms() {
                 const response = await fetch('/getAllRoom');
                 const data = await response.json();
                 setRooms(data);
+                setFirstLoad(true);
             } catch (error) {
                 console.error(error);
             }
         };
         if (!firstLoad) {
             fetchRooms();
-        } else {
-            setFirstLoad(true);
-        }
-        if (firstLoad) {
-            setRooms([]);
-        }
+        } 
     }, [firstLoad]);
 
     const fetchFindAvailableRooms = async () => {
@@ -46,6 +42,7 @@ export default function Rooms() {
             const response = await fetch('/checkReservation', requestOptions);
             const data = await response.json();
             console.log('🚀 ~ file: Rooms.js:44', data);
+            setRooms(data);
         } catch (error) {
             console.log(error);
         }
@@ -66,8 +63,8 @@ export default function Rooms() {
     return (
         <Box sx={{ width: 1, boxSizing: 'border-box' }}>
             <Box sx={{ display: 'flex', justifyContent: 'center', backgroundColor: 'rgba(255,255,255,0.8)' }}>
-                {/* <BasicDatePicker onDateChange={handleDateInChange} labelText='Check in' />
-                <BasicDatePicker onDateChange={handleDateOutChange} labelText='Check out'  /> */}
+                <BasicDatePicker onDateChange={handleDateInChange} labelText='Check in' today={dateIn}/>
+                <BasicDatePicker onDateChange={handleDateOutChange} labelText='Check out'  today={dateOut}/>
                 <CommonButton
                     onClick={handleSearch}
                     type="submit"

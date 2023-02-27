@@ -9,22 +9,26 @@ export default function BasicDatePicker({ onDateChange, disableDates, labelText,
     const [value, setValue] = React.useState(new Date(today));
 
     function shouldDisableDate(day) {
-        for (let i = 0; i < disableDates.length; i++) {
-            const disableRangeStart = new Date(disableDates[i].checkIn);
-            const disableRangeEnd = new Date(disableDates[i].checkOut);
-            if (day.add(1,'day') >= disableRangeStart && day <= disableRangeEnd) {
-                return true;
+        if (!disableDates || disableDates.length === 0) {
+            return false;
+        } else {
+            for (let i = 0; i < disableDates.length; i++) {
+                const disableRangeStart = new Date(disableDates[i].checkIn);
+                const disableRangeEnd = new Date(disableDates[i].checkOut);
+                if (day.add(1, 'day') >= disableRangeStart && day.add(1, 'day') <= disableRangeEnd) {
+                    return true;
+                }
             }
+
+            return false;
         }
-        return false;
     }
 
     const handleDateChange = (newValue) => {
         setValue(newValue);
         onDateChange(newValue);
     };
-    const a = disableDates;
-    console.log('DATAPICKER: ', a[0]);
+
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Box sx={{ mx: '10px', my: '50px' }}>
@@ -36,6 +40,9 @@ export default function BasicDatePicker({ onDateChange, disableDates, labelText,
                     shouldDisableDate={shouldDisableDate}
                     onChange={handleDateChange}
                     renderInput={(params) => <TextField {...params} />}
+                    disableHighlightToday={true}
+                    disablePast={true}
+                    autoOk={true}
                 />
             </Box>
         </LocalizationProvider>

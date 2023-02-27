@@ -17,6 +17,7 @@ router.post('/sendMessage', ContactController.sendMessage);
 router.post('/createRoom', RoomControllers.createRoom);
 router.post('/createReservation', ReservationController.createReservation);
 router.post('/checkIsRoomIsAvailable', ReservationController.checkIsRoomIsAvailable);
+router.post('/checkReservation', ReservationController.checkReservation);
 router.post('/createUser', UserController.createUser);
 router.post('/editUserData', UserController.editUserData);
 router.post('/editUserPassword', UserController.editUserPassword);

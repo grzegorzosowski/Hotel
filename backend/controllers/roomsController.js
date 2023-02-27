@@ -25,6 +25,7 @@ class RoomController {
         let doc;
         try {
             doc = await Room.find({});
+            console.log("GET ALL ROOM: ", doc);
         } catch (err) {
             console.log(err);
             return res.status(500).json({ message: err.message });

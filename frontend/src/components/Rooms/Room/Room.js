@@ -2,7 +2,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import logo from './room1.jpeg';
-import CommonModal from '../../BookModal/BookModal';
+import BookModal from '../../BookModal/BookModal';
 
 function Room(props) {
     return (
@@ -44,14 +44,7 @@ function Room(props) {
                         deserunt labore cupidatat qui. Fugiat eiusmod dolor elit labore fugiat id proident sunt
                         cupidatat occaecat duis duis. Consectetur ullamco duis nulla dolor.
                     </Typography>
-                    {props.beds ? (
-                        <CommonModal nameRoom={props.name}></CommonModal>
-                    ) : (
-                        <Typography variant="h6" mb="5px">
-                            No rooms available
-                        </Typography>
-                    )}
-                    
+                    <BookModal nameRoom={props.name}></BookModal>
                 </Box>
                 <Box sx={{ width: '50%', textAlign: 'center' }}>
                     <img src={logo} width="600px" height="600px" alt="Room" />

@@ -5,7 +5,7 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import CommonButton from '../common/CommonButton/CommonButton';
 import { Typography } from '@mui/material';
-import BasicDatePicker from '../DatePicker/DatePicker';
+import BasicDatePicker from '../BasicDatePicker/BasicDatePicker';
 import { useState } from 'react';
 import { useUser } from '../../UserProvider';
 import { Link, useLocation } from 'react-router-dom';
@@ -29,10 +29,11 @@ export default function BookModal({ nameRoom }) {
     const isLogged = !!user;
     const [open, setOpen] = useState(false);
     const [dateIn, setDateIn] = useState(new Date());
-    const [dateOut, setDateOut] = useState(new Date().setDate(new Date().getDate() + 1));
+    const [dateOut, setDateOut] = useState(new Date(new Date().setDate(new Date().getDate() + 1)));
     const [successMessage, setSuccessMessage] = useState(false);
     const [disableDates, setDisableDates] = useState({});
     const [dateIncorrect, setDateIncorrect] = useState(false);
+    const [dateNoAvailable, setDateNoAvailable] = useState(false);
     const location = useLocation();
     const requestReservationOptions = {
         method: 'POST',
@@ -56,22 +57,24 @@ export default function BookModal({ nameRoom }) {
     };
 
     React.useEffect(() => {
-        if (new Date(dateIn) > new Date(dateOut).setDate(new Date(dateOut).getDate() - 1)) {
+        setDateNoAvailable(false);
+        setDateIncorrect(false);
+        if (new Date(dateIn).setHours(0,0,0,0) >= new Date(dateOut).setHours(0,0,0,0)) {
             setDateIncorrect(true);
-        } else {
-            setDateIncorrect(false);
         }
-        console.log('Date incorect: ', dateIncorrect);
-    });
+        for (let i = 0; i < disableDates.length; i++) {
+            const disableRangeStart = new Date(disableDates[i].checkIn).setHours(0,0,0,0);
+            if (disableRangeStart > new Date(dateIn).setHours(0,0,0,0) && disableRangeStart < new Date(dateOut).setHours(0,0,0,0)) {
+                setDateNoAvailable(true)
+            }
+        }
+    }, [dateIn, dateOut]);
 
     const fetchCheckIsRoomIsAvailable = async () => {
         const response = await fetch('/checkIsRoomIsAvailable', requestAvailableOptions);
         if (response) console.log('WE GOT RESPONSE');
         const notAvailableDays = await response.json();
         setDisableDates(notAvailableDays);
-        // console.log("🚀 ~ file: BookModal.js:58 ~ fetchCheckIsRoomIsAvailable ~ notAvailableDays:", notAvailableDays)
-        console.log('DIASBLEDATES after SET: ', disableDates);
-
         return notAvailableDays;
     };
 
@@ -95,10 +98,9 @@ export default function BookModal({ nameRoom }) {
     };
 
     const handleSearch = () => {
-        if(!dateIncorrect) {
+        if(!dateIncorrect && !dateNoAvailable) {
           fetchCreateReservation();
         } 
-        
     };
 
     const handleOpen = async () => {
@@ -107,6 +109,7 @@ export default function BookModal({ nameRoom }) {
         setOpen(true);
     };
     const handleClose = () => setOpen(false);
+
     sessionStorage.setItem('previousLocation', location.pathname);
 
     return (
@@ -141,16 +144,17 @@ export default function BookModal({ nameRoom }) {
                                         onDateChange={handleDateInChange}
                                         disableDates={disableDates}
                                         labelText="Check in"
-                                        today={new Date()}
+                                        today={dateIn}
                                     />
                                     <BasicDatePicker
                                         onDateChange={handleDateOutChange}
                                         disableDates={disableDates}
                                         labelText="Check out"
-                                        today={new Date().setDate(new Date().getDate() + 1)}
+                                        today={dateOut}
                                     />
                                 </Box>
                                 {dateIncorrect && <Box>Check out date must be at least 1 day after check in</Box>}
+                                {dateNoAvailable && <Box>You choose wrong dates. Active reservation between your dateIn dateOut</Box>}
                                 {isLogged ? (
                                     <CommonButton
                                         onClick={handleSearch}
