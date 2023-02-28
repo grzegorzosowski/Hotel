@@ -37,11 +37,23 @@ class ReservationController {
         return res.json(notAvailableDays);
     }
 
+    //This function is looking for reservations between dateIn and dateOut, and return array of nameRoom of already booked rooms,
+    //then query to find free rooms is generating
     async checkReservation(req, res) {
         const dateIn = new Date(req.body.dateIn);
+        console.log('🚀 ~ file: reservationController.js:44  ~ dateIn:', dateIn);
         const dateOut = new Date(req.body.dateOut);
+        console.log('🚀 ~ file: reservationController.js:46  ~ dateOut:', dateOut);
+
         const response = await Reservation.find(
-            { $and: [{ checkIn: { $lte: dateIn } }, { checkOut: { $gte: dateOut } }] },
+            {
+                $or: [
+                    { $and: [{ checkIn: { $gte: dateIn } }, { checkOut: { $lte: dateOut } }] },
+                    { $and: [{ checkIn: { $lt: dateIn } }, { checkOut: { $gt: dateOut } }] },
+                    { $and: [{ checkIn: { $gte: dateIn } }, { checkIn: { $lte: dateOut } }] },
+                    { $and: [{ checkOut: { $gte: dateIn } }, { checkOut: { $lte: dateOut } }] },
+                ],
+            },
             { nameRoom: 1 }
         );
         console.log(response);
@@ -57,9 +69,7 @@ class ReservationController {
         } else {
             const allRoom = await Room.find();
             return res.status(200).json(allRoom);
-
         }
-
     }
 }
 

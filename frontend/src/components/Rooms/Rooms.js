@@ -10,6 +10,7 @@ export default function Rooms() {
     const [firstLoad, setFirstLoad] = useState(false);
     const [dateIn, setDateIn] = useState(new Date());
     const [dateOut, setDateOut] = useState(new Date(new Date().setDate(new Date().getDate() + 1)));
+    const [dateIncorrect, setDateIncorrect] = useState(false);
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -34,8 +35,8 @@ export default function Rooms() {
         };
         if (!firstLoad) {
             fetchRooms();
-        } 
-    }, [firstLoad]);
+        }
+    }, [firstLoad, dateIn, dateOut]);
 
     const fetchFindAvailableRooms = async () => {
         try {
@@ -49,7 +50,12 @@ export default function Rooms() {
     };
 
     const handleSearch = () => {
-        fetchFindAvailableRooms();
+        setDateIncorrect(false);
+        if (new Date(dateIn).setHours(0, 0, 0, 0) >= new Date(dateOut).setHours(0, 0, 0, 0)) {
+            setDateIncorrect(true);
+        } else {
+            fetchFindAvailableRooms();
+        }
     };
 
     const handleDateInChange = (newValue) => {
@@ -63,8 +69,13 @@ export default function Rooms() {
     return (
         <Box sx={{ width: 1, boxSizing: 'border-box' }}>
             <Box sx={{ display: 'flex', justifyContent: 'center', backgroundColor: 'rgba(255,255,255,0.8)' }}>
-                <BasicDatePicker onDateChange={handleDateInChange} labelText='Check in' today={dateIn}/>
-                <BasicDatePicker onDateChange={handleDateOutChange} labelText='Check out'  today={dateOut}/>
+                <BasicDatePicker onDateChange={handleDateInChange} labelText="Check in" today={dateIn} />
+                <BasicDatePicker
+                    onDateChange={handleDateOutChange}
+                    labelText="Check out"
+                    today={dateOut}
+                    error={dateIncorrect}
+                />
                 <CommonButton
                     onClick={handleSearch}
                     type="submit"
@@ -79,7 +90,6 @@ export default function Rooms() {
             {rooms.map((room) => (
                 <Room key={room.name} name={room.name} type={room.type} beds={room.beds} />
             ))}
-
         </Box>
     );
 }

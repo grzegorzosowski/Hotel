@@ -59,16 +59,19 @@ export default function BookModal({ nameRoom }) {
     React.useEffect(() => {
         setDateNoAvailable(false);
         setDateIncorrect(false);
-        if (new Date(dateIn).setHours(0,0,0,0) >= new Date(dateOut).setHours(0,0,0,0)) {
+        if (new Date(dateIn).setHours(0, 0, 0, 0) >= new Date(dateOut).setHours(0, 0, 0, 0)) {
             setDateIncorrect(true);
         }
         for (let i = 0; i < disableDates.length; i++) {
-            const disableRangeStart = new Date(disableDates[i].checkIn).setHours(0,0,0,0);
-            if (disableRangeStart > new Date(dateIn).setHours(0,0,0,0) && disableRangeStart < new Date(dateOut).setHours(0,0,0,0)) {
-                setDateNoAvailable(true)
+            const disableRangeStart = new Date(disableDates[i].checkIn).setHours(0, 0, 0, 0);
+            if (
+                disableRangeStart > new Date(dateIn).setHours(0, 0, 0, 0) &&
+                disableRangeStart < new Date(dateOut).setHours(0, 0, 0, 0)
+            ) {
+                setDateNoAvailable(true);
             }
         }
-    }, [dateIn, dateOut]);
+    }, [dateIn, dateOut, disableDates]);
 
     const fetchCheckIsRoomIsAvailable = async () => {
         const response = await fetch('/checkIsRoomIsAvailable', requestAvailableOptions);
@@ -98,9 +101,9 @@ export default function BookModal({ nameRoom }) {
     };
 
     const handleSearch = () => {
-        if(!dateIncorrect && !dateNoAvailable) {
-          fetchCreateReservation();
-        } 
+        if (!dateIncorrect && !dateNoAvailable) {
+            fetchCreateReservation();
+        }
     };
 
     const handleOpen = async () => {
@@ -151,10 +154,13 @@ export default function BookModal({ nameRoom }) {
                                         disableDates={disableDates}
                                         labelText="Check out"
                                         today={dateOut}
+                                        outPicker={true}
                                     />
                                 </Box>
                                 {dateIncorrect && <Box>Check out date must be at least 1 day after check in</Box>}
-                                {dateNoAvailable && <Box>You choose wrong dates. Active reservation between your dateIn dateOut</Box>}
+                                {dateNoAvailable && (
+                                    <Box>You choose wrong dates. Active reservation between your dateIn dateOut</Box>
+                                )}
                                 {isLogged ? (
                                     <CommonButton
                                         onClick={handleSearch}
