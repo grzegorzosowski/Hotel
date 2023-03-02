@@ -1,10 +1,22 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import logo from './room1.jpeg';
 import BookModal from '../../BookModal/BookModal';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 function Room(props) {
+    const links = props.imgUrls;
+    console.log("🚀 ~ file: Room.js:13 ~ Room ~ links:", links)
+    
+    const settings = {
+        dots: false,
+        infinite: true,
+        speed: 1000,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+    };
     return (
         <>
             <Box
@@ -14,9 +26,10 @@ function Room(props) {
                     color: 'white',
                     display: 'flex',
                     justifyContent: 'space-evenly',
-                    mt: '50px',
+                    mt: '20px',
                     mb: '50px',
-                    backgroundColor: 'rgba(0,0,0,0.7)',
+                    backgroundColor: 'rgba(0,0,0,0.9)',
+                    borderRadius: '5px',
                 }}
             >
                 <Box
@@ -47,7 +60,15 @@ function Room(props) {
                     <BookModal nameRoom={props.name}></BookModal>
                 </Box>
                 <Box sx={{ width: '50%', textAlign: 'center' }}>
-                    <img src={logo} width="600px" height="600px" alt="Room" />
+                    <Slider {...settings}>
+                        {links &&
+                        links.map((link, index) => (
+                            <Box>
+                            <img key={index} src={link} height="450px" alt={`Image ${index}`} />
+                        </Box>
+                        ))}
+                        
+                    </Slider>
                 </Box>
             </Box>
         </>

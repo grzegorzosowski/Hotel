@@ -9,6 +9,7 @@ const UserController = require('../controllers/userControllers');
 
 router.get('/getAllRoom', RoomControllers.getAllRoom);
 router.get('/getRoom/:nameRoom', RoomControllers.getRoom);
+
 router.get('/user', loggedIn, function (req, res, next) {
     res.send(req.user);
 });
@@ -17,6 +18,7 @@ router.post('/sendMessage', ContactController.sendMessage);
 router.post('/createRoom', RoomControllers.createRoom);
 router.post('/createReservation', ReservationController.createReservation);
 router.post('/checkIsRoomIsAvailable', ReservationController.checkIsRoomIsAvailable);
+router.post('/userReservations', ReservationController.userReservations);
 router.post('/checkReservation', ReservationController.checkReservation);
 router.post('/createUser', UserController.createUser);
 router.post('/editUserData', UserController.editUserData);

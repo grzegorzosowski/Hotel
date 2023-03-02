@@ -11,16 +11,7 @@ export default function Rooms() {
     const [dateIn, setDateIn] = useState(new Date());
     const [dateOut, setDateOut] = useState(new Date(new Date().setDate(new Date().getDate() + 1)));
     const [dateIncorrect, setDateIncorrect] = useState(false);
-    const requestOptions = {
-        method: 'POST',
-        headers: {
-            'Content-type': 'application/json',
-        },
-        body: JSON.stringify({
-            dateIn: dateIn,
-            dateOut: dateOut,
-        }),
-    };
+    
 
     React.useEffect(() => {
         const fetchRooms = async () => {
@@ -40,6 +31,16 @@ export default function Rooms() {
 
     const fetchFindAvailableRooms = async () => {
         try {
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    dateIn: dateIn,
+                    dateOut: dateOut,
+                }),
+            };
             const response = await fetch('/checkReservation', requestOptions);
             const data = await response.json();
             console.log('🚀 ~ file: Rooms.js:44', data);
@@ -68,7 +69,7 @@ export default function Rooms() {
 
     return (
         <Box sx={{ width: 1, boxSizing: 'border-box' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'center', backgroundColor: 'rgba(255,255,255,0.8)' }}>
+            <Box mt={'20px'} sx={{ display: 'flex', justifyContent: 'center', backgroundColor: 'rgba(255,255,255,0.8)', borderRadius: '5px' }}>
                 <BasicDatePicker onDateChange={handleDateInChange} labelText="Check in" today={dateIn} />
                 <BasicDatePicker
                     onDateChange={handleDateOutChange}
@@ -88,7 +89,7 @@ export default function Rooms() {
                 </CommonButton>
             </Box>
             {rooms.map((room) => (
-                <Room key={room.name} name={room.name} type={room.type} beds={room.beds} />
+                <Room key={room.name} name={room.name} type={room.type} beds={room.beds} imgUrls={room.imgLinks}/>
             ))}
         </Box>
     );

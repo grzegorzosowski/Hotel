@@ -56,7 +56,7 @@ export default function Signup() {
                 <FailedMessage
                     userData={userData.message}
                     handleButton={() => {
-                        setFailedMessage(false);
+                        setFailedMessage(false); 
                         setShowSuccessMessage(false);
                     }}
                 ></FailedMessage>

@@ -17,7 +17,7 @@ import { Link } from 'react-router-dom';
 import { useUser } from '../../UserProvider';
 
 const pages = ['About', 'Rooms', 'Contact'];
-const userSettings = ['Profile', 'Account', 'Logout'];
+const userSettings = ['Reservations', 'Account', 'Logout'];
 const adminSettings = ['Profile', 'Account', 'Manager', 'Logout'];
 
 const options2 = [

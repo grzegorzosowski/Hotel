@@ -71,6 +71,11 @@ class ReservationController {
             return res.status(200).json(allRoom);
         }
     }
+
+    async userReservations(req,res) {
+        const userRes = await Reservation.find({bookedBy: req.session.passport.user.uEmail});
+        return res.json(userRes)
+    }
 }
 
 module.exports = new ReservationController();
