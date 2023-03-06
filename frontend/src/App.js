@@ -14,72 +14,73 @@ import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 import { useUser } from './UserProvider';
 import Account from './components/Account/Account';
 import Reservations from './components/Reservations/Reservations';
-
-
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import { SnackbarProvider } from 'notistack';
 
 function App() {
     const user = useUser();
     return (
         <div className="App">
-            <Navbar />
-            <React.Fragment>
-                <CssBaseline />
-                <Container maxWidth="lg">
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <Routes>
-                            <Route path="/" element={<HomePage />} />
-                            <Route path="/About" element={<HomePage />} />
-                            <Route path="/Rooms" element={<Rooms />} />
-                            <Route path="/Contact" element={<Contact />} />
-                            <Route
-                                path="/Login"
-                                element={
-                                    <ProtectedRoute isAllowed={!user}>
-                                        <Login />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route
-                                path="/Signup"
-                                element={
-                                    <ProtectedRoute isAllowed={!user}>
-                                        <Signup />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route path="/Logout" element={<Logout />} />
-                            <Route
-                                path="/Reservations"
-                                element={
-                                    <ProtectedRoute isAllowed={!!user}>
-                                        <Reservations />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route
-                                path="/Account"
-                                element={
-                                    <ProtectedRoute isAllowed={!!user}>
-                                        <Account />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route
-                                path="/Manager"
-                                element={
-                                    <ProtectedRoute isAllowed={!!user && user.roles === 'admin'} redirectPath="/">
-                                        <Manager />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route path="*" element={<NotFound />} />
-                        </Routes>
-                    </Box>
-                </Container>
-            </React.Fragment>
+            <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
+                <Navbar />
+                <React.Fragment>
+                    <CssBaseline />
+                    <Container maxWidth="lg">
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <Routes>
+                                <Route path="/" element={<HomePage />} />
+                                <Route path="/About" element={<HomePage />} />
+                                <Route path="/Rooms" element={<Rooms />} />
+                                <Route path="/Contact" element={<Contact />} />
+                                <Route
+                                    path="/Login"
+                                    element={
+                                        <ProtectedRoute isAllowed={!user}>
+                                            <Login />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/Signup"
+                                    element={
+                                        <ProtectedRoute isAllowed={!user}>
+                                            <Signup />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route path="/Logout" element={<Logout />} />
+                                <Route
+                                    path="/Reservations"
+                                    element={
+                                        <ProtectedRoute isAllowed={!!user}>
+                                            <Reservations />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/Account"
+                                    element={
+                                        <ProtectedRoute isAllowed={!!user}>
+                                            <Account />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/Manager"
+                                    element={
+                                        <ProtectedRoute isAllowed={!!user && user.roles === 'admin'} redirectPath="/">
+                                            <Manager />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route path="*" element={<NotFound />} />
+                            </Routes>
+                        </Box>
+                    </Container>
+                </React.Fragment>
+            </SnackbarProvider>
         </div>
     );
 }

@@ -8,6 +8,11 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 export default function BasicDatePicker({ onDateChange, disableDates, labelText, today, error, outPicker }) {
     const [value, setValue] = React.useState(new Date(today));
 
+    React.useEffect(() => {
+        setValue(new Date(today))
+
+    },[today])
+
     //outPicker is using to proper render disable days for Check Out Picker.
     //In Check Out Picker user can pick day existing as a checkIn day in another reservation
     function shouldDisableDate(day) {

@@ -4,13 +4,14 @@ import CommonButton from '../common/CommonButton/CommonButton';
 import { useState } from 'react';
 import { Box } from '@mui/material';
 import BasicDatePicker from '../BasicDatePicker/BasicDatePicker';
+import { useSnackbar } from 'notistack';
 
 export default function Rooms() {
     const [rooms, setRooms] = useState([]);
     const [firstLoad, setFirstLoad] = useState(false);
     const [dateIn, setDateIn] = useState(new Date());
     const [dateOut, setDateOut] = useState(new Date(new Date().setDate(new Date().getDate() + 1)));
-    const [dateIncorrect, setDateIncorrect] = useState(false);
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     
 
     React.useEffect(() => {
@@ -51,16 +52,17 @@ export default function Rooms() {
     };
 
     const handleSearch = () => {
-        setDateIncorrect(false);
         if (new Date(dateIn).setHours(0, 0, 0, 0) >= new Date(dateOut).setHours(0, 0, 0, 0)) {
-            setDateIncorrect(true);
+                enqueueSnackbar('Check out date must be at least 1 day after check in', { variant: 'error' });
         } else {
+            closeSnackbar();
             fetchFindAvailableRooms();
         }
     };
 
     const handleDateInChange = (newValue) => {
         setDateIn(newValue);
+        handleDateOutChange(new Date(new Date(newValue).setDate(new Date(newValue).getDate() + 1)));
     };
 
     const handleDateOutChange = (newValue) => {
@@ -75,7 +77,6 @@ export default function Rooms() {
                     onDateChange={handleDateOutChange}
                     labelText="Check out"
                     today={dateOut}
-                    error={dateIncorrect}
                 />
                 <CommonButton
                     onClick={handleSearch}

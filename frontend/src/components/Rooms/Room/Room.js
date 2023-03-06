@@ -6,8 +6,8 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-function Room(props) {
-    const links = props.imgUrls;
+function Room({imgUrls, name, type, beds}) {
+    const links = imgUrls;
     console.log("🚀 ~ file: Room.js:13 ~ Room ~ links:", links)
     
     const settings = {
@@ -42,13 +42,13 @@ function Room(props) {
                     }}
                 >
                     <Typography variant="h3" mb={'20px'}>
-                        {props.name}
+                        {name}
                     </Typography>
                     <Typography variant="body1" my="10px">
-                        <b>Class:</b> {props.type}
+                        <b>Class:</b> {type}
                     </Typography>
                     <Typography variant="body1" my="10px">
-                        <b>Sleeps up to:</b> {props.beds}
+                        <b>Sleeps up to:</b> {beds}
                     </Typography>
                     <Typography variant="body2">
                         Veniam aliquip duis aute adipisicing ipsum consectetur sint culpa. Esse ut ullamco amet irure.
@@ -57,14 +57,14 @@ function Room(props) {
                         deserunt labore cupidatat qui. Fugiat eiusmod dolor elit labore fugiat id proident sunt
                         cupidatat occaecat duis duis. Consectetur ullamco duis nulla dolor.
                     </Typography>
-                    <BookModal nameRoom={props.name}></BookModal>
+                    <BookModal nameRoom={name}></BookModal>
                 </Box>
                 <Box sx={{ width: '50%', textAlign: 'center' }}>
                     <Slider {...settings}>
                         {links &&
                         links.map((link, index) => (
                             <Box>
-                            <img key={index} src={link} height="450px" alt={`Image ${index}`} />
+                            <img key={index} src={link} height="450px" alt={`Number ${index}`} />
                         </Box>
                         ))}
                         
