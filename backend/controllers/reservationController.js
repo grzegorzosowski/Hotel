@@ -1,5 +1,6 @@
 const Reservation = require('../db/models/reservation');
 const Room = require('../db/models/room');
+const User = require('../db/models/user');
 
 class ReservationController {
     async createReservation(req, res) {
@@ -45,7 +46,7 @@ class ReservationController {
         const dateOut = new Date(req.body.dateOut);
         console.log('🚀 ~ file: reservationController.js:46  ~ dateOut:', dateOut);
 
-        const response = await Reservation.find(
+        const finishData = await Reservation.find(
             {
                 $or: [
                     { $and: [{ checkIn: { $gte: dateIn } }, { checkOut: { $lte: dateOut } }] },
@@ -56,25 +57,50 @@ class ReservationController {
             },
             { nameRoom: 1 }
         );
-        console.log(response);
-        if (response.length > 0) {
-            const reservationQuery = (response) => {
-                const finalQuery = response.map((reservation) => {
+        console.log(finishData);
+        if (finishData.length > 0) {
+            const reservationQuery = (finishData) => {
+                const finalQuery = finishData.map((reservation) => {
                     return { name: { $ne: reservation.nameRoom } };
                 });
                 return finalQuery;
             };
-            const myFinalResponse = await Room.find({ $and: reservationQuery(response) });
-            return res.status(200).json(myFinalResponse);
+            const myFinalfinishData = await Room.find({ $and: reservationQuery(finishData) });
+            return res.status(200).json(myFinalfinishData);
         } else {
             const allRoom = await Room.find();
             return res.status(200).json(allRoom);
         }
     }
 
-    async userReservations(req,res) {
-        const userRes = await Reservation.find({bookedBy: req.session.passport.user.uEmail});
-        return res.json(userRes)
+    async userReservations(req, res) {
+        const userReservation = await Reservation.find({
+            $and: [{ bookedBy: { $eq: req.session.passport.user.uEmail } }, { checkOut: { $gte: new Date() } }],
+        }).lean();
+
+        let arr = [];
+        if (userReservation.length > 0) {
+            for (let i = 0; i < userReservation.length; i++) {
+                const name = userReservation[i].nameRoom;
+                const roomData = await Room.find({ name: name }).lean();
+                arr.push(roomData[0]);
+            }
+        }
+        const finishData = userReservation.map((arg, index) => ({ ...arg, ...arr[index] }));
+        finishData.sort((a, b) => {
+            return new Date(a.checkIn).valueOf() - new Date(b.checkIn).valueOf();
+        });
+        return res.json(finishData);
+    }
+
+    async manageReservations(req, res) {
+        const finishData = await Reservation.find();
+        return res.json(finishData);
+    }
+
+    async deleteReservation(req, res) {
+        const finishData = await Reservation.deleteOne({ _id: req.body.reservationID });
+        return res.status(200).json(finishData);
     }
 }
 

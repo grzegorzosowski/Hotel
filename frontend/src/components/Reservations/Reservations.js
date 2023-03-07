@@ -16,22 +16,9 @@ export default function Reservations() {
             };
             const response = await fetch('/userReservations', requestOptions);
             const data = await response.json();
-
-            let arr = [];
-            if (data.length > 0) {
-                for (let i = 0; i < data.length; i++) {
-                    const name = data[i].nameRoom;
-                    const response2 = await fetch(`/getRoom/${name}`);
-                    const data2 = await response2.json();
-                    arr.push(data2);
-                }
-            }
-            const finishData = data.map((arg, index) => ({ ...arg, ...arr[index] }));
-            finishData.sort((a, b) => {
-                return new Date(a.checkIn).valueOf() - new Date(b.checkIn).valueOf();
-            });
-            setReservations(finishData);
-            console.log(finishData);
+            setReservations(data);
+            console.log("🚀 ~ file: Reservations.js:20 ~ getUserReservations ~ data:", data)
+            console.log(data);
         } catch (error) {
             console.log(error);
         }

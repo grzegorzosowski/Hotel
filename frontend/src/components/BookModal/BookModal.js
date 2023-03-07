@@ -8,7 +8,7 @@ import { Typography } from '@mui/material';
 import BasicDatePicker from '../BasicDatePicker/BasicDatePicker';
 import { useState } from 'react';
 import { useUser } from '../../UserProvider';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
 const style = {
@@ -36,7 +36,6 @@ export default function BookModal({ nameRoom }) {
     const [dateIncorrect, setDateIncorrect] = useState(false);
     const [dateNoAvailable, setDateNoAvailable] = useState(false);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-    const location = useLocation();
     const requestReservationOptions = {
         method: 'POST',
         headers: {
@@ -126,8 +125,6 @@ export default function BookModal({ nameRoom }) {
         setOpen(false);
         closeSnackbar();
     };
-
-    sessionStorage.setItem('previousLocation', location.pathname);
 
     return (
         <div>

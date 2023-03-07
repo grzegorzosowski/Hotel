@@ -4,10 +4,11 @@ import CommonTextField from '../common/commonTextField/CommonTextField';
 import CommonButton from '../common/CommonButton/CommonButton';
 import InputPassword from '../common/InputPassword';
 import Typography from '@mui/material/Typography';
+import { useSnackbar } from 'notistack';
 
 export default function Login() {
     const [form, setForm] = useState({});
-    const [wrongPwd, setWrongPwd] = useState(false);
+    const { enqueueSnackbar } = useSnackbar();
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -27,7 +28,7 @@ export default function Login() {
                 await fetch('/user', { method: 'get' });
                 window.location.replace('/Rooms');
             } else {
-                setWrongPwd(true);
+                enqueueSnackbar('Wrong password', { variant: 'error' });
             }
         } catch (error) {
             console.log('Some error during logging');
@@ -81,7 +82,6 @@ export default function Login() {
                             onChange={(event) => setForm({ ...form, userPassword: event.target.value })}
                             text={'Password'}
                         ></InputPassword>
-                        {wrongPwd && <Box>WRONG PASSWORD</Box>}
                         <CommonButton
                             type="submit"
                             variant="contained"

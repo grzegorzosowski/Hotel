@@ -8,6 +8,7 @@ const RoomControllers = require('../controllers/roomsController');
 const UserController = require('../controllers/userControllers');
 
 router.get('/getAllRoom', RoomControllers.getAllRoom);
+router.get('/manageReservations', ReservationController.manageReservations);
 router.get('/getRoom/:nameRoom', RoomControllers.getRoom);
 
 router.get('/user', loggedIn, function (req, res, next) {
@@ -41,6 +42,7 @@ router.post('/logout', (req, res, next) => {
 
 router.put('/editRoom/:id', RoomControllers.editRoom);
 router.delete('/deleteRoom/:id', RoomControllers.deleteRoom);
+router.delete('/deleteReservation', ReservationController.deleteReservation);
 
 function loggedIn(req, res, next) {
     if (req.user) {
