@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "my-new-app-f64ef"
-  }
+    "default": "my-hotel-backend",
+    "backend": "my-hotel-backend"
+  },
+  "targets": {},
+  "etags": {}
 }
